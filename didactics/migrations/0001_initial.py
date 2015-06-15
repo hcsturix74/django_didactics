@@ -1,108 +1,76 @@
 # -*- coding: utf-8 -*-
-from south.utils import datetime_utils as datetime
-from south.db import db
-from south.v2 import SchemaMigration
-from django.db import models
+from __future__ import unicode_literals
+
+from django.db import models, migrations
 
 
-class Migration(SchemaMigration):
+class Migration(migrations.Migration):
 
-    def forwards(self, orm):
-        # Adding model 'Subject'
-        db.create_table(u'didactics_subject', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('subject_name', self.gf('django.db.models.fields.CharField')(max_length=100)),
-            ('description', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
-        ))
-        db.send_create_signal(u'didactics', ['Subject'])
+    dependencies = [
+    ]
 
-        # Adding model 'Course'
-        db.create_table(u'didactics_course', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('course_name', self.gf('django.db.models.fields.CharField')(max_length=100)),
-            ('description', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
-            ('subject', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['didactics.Subject'])),
-        ))
-        db.send_create_signal(u'didactics', ['Course'])
-
-        # Adding model 'Lesson'
-        db.create_table(u'didactics_lesson', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('title', self.gf('django.db.models.fields.CharField')(max_length=100)),
-            ('description', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
-            ('course', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['didactics.Course'])),
-        ))
-        db.send_create_signal(u'didactics', ['Lesson'])
-
-        # Adding model 'AttachmentType'
-        db.create_table(u'didactics_attachmenttype', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('type_name', self.gf('django.db.models.fields.CharField')(max_length=100)),
-        ))
-        db.send_create_signal(u'didactics', ['AttachmentType'])
-
-        # Adding model 'LessonAttachment'
-        db.create_table(u'didactics_lessonattachment', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('caption', self.gf('django.db.models.fields.CharField')(max_length=100)),
-            ('attachment_type', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['didactics.AttachmentType'])),
-            ('attachment', self.gf('django.db.models.fields.files.FileField')(max_length=100)),
-            ('lesson', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['didactics.Lesson'])),
-        ))
-        db.send_create_signal(u'didactics', ['LessonAttachment'])
-
-
-    def backwards(self, orm):
-        # Deleting model 'Subject'
-        db.delete_table(u'didactics_subject')
-
-        # Deleting model 'Course'
-        db.delete_table(u'didactics_course')
-
-        # Deleting model 'Lesson'
-        db.delete_table(u'didactics_lesson')
-
-        # Deleting model 'AttachmentType'
-        db.delete_table(u'didactics_attachmenttype')
-
-        # Deleting model 'LessonAttachment'
-        db.delete_table(u'didactics_lessonattachment')
-
-
-    models = {
-        u'didactics.attachmenttype': {
-            'Meta': {'object_name': 'AttachmentType'},
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'type_name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
-        },
-        u'didactics.course': {
-            'Meta': {'object_name': 'Course'},
-            'course_name': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'description': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'subject': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['didactics.Subject']"})
-        },
-        u'didactics.lesson': {
-            'Meta': {'object_name': 'Lesson'},
-            'course': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['didactics.Course']"}),
-            'description': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'title': ('django.db.models.fields.CharField', [], {'max_length': '100'})
-        },
-        u'didactics.lessonattachment': {
-            'Meta': {'object_name': 'LessonAttachment'},
-            'attachment': ('django.db.models.fields.files.FileField', [], {'max_length': '100'}),
-            'attachment_type': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['didactics.AttachmentType']"}),
-            'caption': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'lesson': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['didactics.Lesson']"})
-        },
-        u'didactics.subject': {
-            'Meta': {'object_name': 'Subject'},
-            'description': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'subject_name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
-        }
-    }
-
-    complete_apps = ['didactics']
+    operations = [
+        migrations.CreateModel(
+            name='AttachmentType',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('type_name', models.CharField(max_length=100, verbose_name='Type Name')),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Course',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('course_name', models.CharField(max_length=100, verbose_name='Course Name')),
+                ('description', models.TextField(null=True, verbose_name='Description', blank=True)),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Lesson',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('title', models.CharField(max_length=100, verbose_name='Lesson Title')),
+                ('description', models.TextField(null=True, verbose_name='Description', blank=True)),
+                ('course', models.ForeignKey(to='didactics.Course')),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='LessonAttachment',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('caption', models.CharField(max_length=100, verbose_name='Caption')),
+                ('attachment', models.FileField(upload_to=b'attachments/', verbose_name='Attachment')),
+                ('attachment_type', models.ForeignKey(to='didactics.AttachmentType')),
+                ('lesson', models.ForeignKey(to='didactics.Lesson')),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Subject',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('subject_name', models.CharField(max_length=100, verbose_name='Subject Name')),
+                ('description', models.TextField(null=True, verbose_name='Description', blank=True)),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.AddField(
+            model_name='course',
+            name='subject',
+            field=models.ForeignKey(to='didactics.Subject'),
+            preserve_default=True,
+        ),
+    ]
