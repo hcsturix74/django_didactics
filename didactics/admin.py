@@ -3,8 +3,14 @@
 from django.contrib import admin
 from didactics.models import *
 
+class AuthorSavingMixin(object):
 
-class SubjectAdmin(admin.ModelAdmin):
+    def save_model(self, request, obj, form, change):
+        if getattr(obj, 'author', None) is None:
+            obj.author = request.user
+        obj.save()
+
+class SubjectAdmin(AuthorSavingMixin, admin.ModelAdmin):
     """
     SubjectAdmin
     """
@@ -14,7 +20,7 @@ class SubjectAdmin(admin.ModelAdmin):
 admin.site.register(Subject, SubjectAdmin)
 
 
-class CourseAdmin(admin.ModelAdmin):
+class CourseAdmin(AuthorSavingMixin, admin.ModelAdmin):
     """
     CourseAdmin
     """
@@ -29,10 +35,11 @@ class LessonAttachmentInline(admin.StackedInline):
     LessonAttachmentInline
     """
     model = LessonAttachment
-    extra = 2
+    extra = 1
 
 
-class AttachmentTypeAdmin(admin.ModelAdmin):
+
+class AttachmentTypeAdmin(AuthorSavingMixin, admin.ModelAdmin):
     """
     AttachmentType
     """
@@ -43,12 +50,22 @@ class AttachmentTypeAdmin(admin.ModelAdmin):
 admin.site.register(AttachmentType, AttachmentTypeAdmin)
 
 
-class LessonAdmin(admin.ModelAdmin):
+class LessonAdmin(AuthorSavingMixin, admin.ModelAdmin):
     """
     LessonAdmin
     """
-    list_display = ('title', 'course', )
-    search_fields = ('title', 'course', )
+    list_display = ('title', 'course', 'subject',)
+    search_fields = ('title', 'course',)
+    exclude = ('author',)
     inlines = [LessonAttachmentInline]
+
+
+    def save_formset(self, request, form, formset, change):
+        instances = formset.save(commit=False)
+        for instance in filter(lambda obj: isinstance(obj, LessonAttachment), instances):
+             if instance.__dict__.get('author', None) is None:
+                 instance.author = request.user
+                 instance.save()
+        formset.save_m2m()
 
 admin.site.register(Lesson, LessonAdmin)

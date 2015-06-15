@@ -96,6 +96,10 @@ class Lesson(GenericBaseModel):
     def __unicode__(self):
         return self.title
 
+    def subject(self):
+        return self.course.subject
+    subject.admin_order_field  = 'lesson__subject'
+
 
 class AttachmentType(GenericBaseModel):
     """
@@ -119,7 +123,7 @@ class LessonAttachment(GenericBaseModel):
     caption = models.CharField(verbose_name=_('Caption'), max_length=100)
     attachment_type = models.ForeignKey(AttachmentType)
     attachment = models.FileField(verbose_name=_('Attachment'), upload_to='attachments/')
-    lesson = models.ForeignKey(Lesson)
+    lesson = models.ForeignKey(Lesson, verbose_name=_('Lesson'))
 
 	
     def __unicode__(self):
