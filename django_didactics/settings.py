@@ -30,13 +30,13 @@ DATABASES = {
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = '*'
+#ALLOWED_HOSTS = '*'
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
 # In a Windows environment this must be set to your system time zone.
-TIME_ZONE = 'Europe/Italy'
+TIME_ZONE = 'Europe/Rome'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
@@ -84,7 +84,7 @@ STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-	os.path.join(PROJECT_PATH, "django_didactics/static"),
+	#os.path.join(PROJECT_PATH, "django_didactics/static"),
 )
 
 # List of finder classes that know how to find static files in
@@ -106,26 +106,16 @@ TEMPLATE_LOADERS = (
 )
 
 MIDDLEWARE_CLASSES = (
-    # 'django.middleware.common.CommonMiddleware',
-    # 'django.contrib.sessions.middleware.SessionMiddleware',
-    # 'django.middleware.csrf.CsrfViewMiddleware',
-    # 'django.contrib.auth.middleware.AuthenticationMiddleware',
-    # 'django.contrib.messages.middleware.MessageMiddleware',
-    # Uncomment the next line for simple clickjacking protection:
-    # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
-	# DjangoCMS requirements -  the following block
-	'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.locale.LocaleMiddleware',
-    'django.middleware.doc.XViewMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'cms.middleware.page.CurrentPageMiddleware',
-    'cms.middleware.user.CurrentUserMiddleware',
-    'cms.middleware.toolbar.ToolbarMiddleware',
-    'cms.middleware.language.LanguageCookieMiddleware',
-	# End of -- DjangoCMS requirements block
+    #Uncomment the next line for simple clickjacking protection:
+    # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+
 )
 
 ROOT_URLCONF = 'django_didactics.urls'
@@ -137,31 +127,16 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-	os.path.join(PROJECT_PATH, "django_didactics/templates"),
+	os.path.join(PROJECT_PATH, "didactics/templates"),
 )
 
-CMS_TEMPLATES = (
-	('base.html', gettext('default')),
-	('home.html', gettext('Homepage')),
-    ('simple_page.html', gettext('Simple Page')),
-    ('contact_page.html', gettext('Contact Page')),
-    ('services.html', gettext('Services Page')),
-    ('gallery-2-col.html', gettext('Gallery Page')),
-    #('col_2_gallery.html', gettext('Two-Col Gallery')),
-	#('col_3.html', gettext('Three-Col Page')),
-	#('gallery.html', gettext('Gallery Page')),
-
-)
-
-TEMPLATE_CONTEXT_PROCESSORS = (
-    'django.contrib.auth.context_processors.auth',
-    'django.core.context_processors.i18n',
-    'django.core.context_processors.request',
-    'django.core.context_processors.media',
-    'django.core.context_processors.static',
-    'cms.context_processors.media',
-    'sekizai.context_processors.sekizai',
-)
+# TEMPLATE_CONTEXT_PROCESSORS = (
+#     'django.contrib.auth.context_processors.auth',
+#     'django.core.context_processors.i18n',
+#     'django.core.context_processors.request',
+#     'django.core.context_processors.media',
+#     'django.core.context_processors.static',
+# )
 
 INSTALLED_APPS = (
     'django.contrib.auth',
@@ -173,77 +148,38 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
-    # 'django.contrib.admindocs',
-	#These are needed for DjangoCMS
-	'djangocms_text_ckeditor',
-	'cms',
-	'mptt',
-	'menus',
-	'south',
-	'sekizai',
-	'easy_thumbnails',
-	# If you do NOT use filer app uncomment these
-	# These are core plugins of DjangoCMS
-    #'cms.plugins.file',
-    #'cms.plugins.flash',
-    #'cms.plugins.googlemap',
-    #'cms.plugins.link',
-    #'cms.plugins.picture',
-    #'cms.plugins.snippet',
-    #'cms.plugins.teaser',
-    #'cms.plugins.text',
-    #'cms.plugins.video',
-    #'cms.plugins.twitter',
-	# End of --- do NOT use filer app uncomment these
-	# if you use filer app instead uncomment this	
-    'filer',
-    'cmsplugin_filer_file',
-    'cmsplugin_filer_folder',
-    'cmsplugin_filer_image',
-    'cmsplugin_filer_teaser',
-    'cmsplugin_filer_video',
-    #'cmsplugin_gallery',
-	# End of --- use filer app uncomment these
-	'reversion',
+    #'django.contrib.admindocs',
+	#this app
     'didactics',
 )
 
-CMSPLUGIN_GALLERY_TEMPLATES = (
-    ('gallery/gallery_template.html', 'Template #1', ),
-    #('app/other_template.html', 'Template #2', ),
-)
 
-CKEDITOR_SETTINGS = {
-        'language': '{{ language }}',
-        'toolbar': 'CMS',
-        'skin': 'moono'
-    }
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
 # the site admins on every HTTP 500 error when DEBUG=False.
 # See http://docs.djangoproject.com/en/dev/topics/logging for
 # more details on how to customize your logging configuration.
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'filters': {
-        'require_debug_false': {
-            '()': 'django.utils.log.RequireDebugFalse'
-        }
-    },
-    'handlers': {
-        'mail_admins': {
-            'level': 'ERROR',
-            'filters': ['require_debug_false'],
-            'class': 'django.utils.log.AdminEmailHandler'
-        }
-    },
-    'loggers': {
-        'django.request': {
-            'handlers': ['mail_admins'],
-            'level': 'ERROR',
-            'propagate': True,
-        },
-    }
-}
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'filters': {
+#         'require_debug_false': {
+#             '()': 'django.utils.log.RequireDebugFalse'
+#         }
+#     },
+#     'handlers': {
+#         'mail_admins': {
+#             'level': 'ERROR',
+#             'filters': ['require_debug_false'],
+#             'class': 'django.utils.log.AdminEmailHandler'
+#         }
+#     },
+#     'loggers': {
+#         'django.request': {
+#             'handlers': ['mail_admins'],
+#             'level': 'ERROR',
+#             'propagate': True,
+#         },
+#     }
+# }
